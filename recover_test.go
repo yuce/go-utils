@@ -37,7 +37,7 @@ func TestRecoverValue_NoErr(t *testing.T) {
 	}
 }
 
-func TestReoverValue_Err(t *testing.T) {
+func TestRecoverValue_Err(t *testing.T) {
 	_, err := check.RecoverValue(func() string {
 		panics()
 		return "FAIL"
