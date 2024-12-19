@@ -1,10 +1,9 @@
-package check_test
+package must_test
 
 import (
 	"errors"
+	"github.com/yuce/go-utils/must"
 	"testing"
-
-	"github.com/yuce/go-check"
 )
 
 var (
@@ -12,7 +11,7 @@ var (
 )
 
 func TestMust_NoErr(t *testing.T) {
-	check.Must(f0NoErr())
+	must.NoErr(f0NoErr())
 }
 
 func TestMust_Err(t *testing.T) {
@@ -20,7 +19,7 @@ func TestMust_Err(t *testing.T) {
 		defer func() {
 			ret = recover()
 		}()
-		check.Must(f0Err())
+		must.NoErr(f0Err())
 		return nil
 	}
 	v := wrapper()
@@ -34,7 +33,7 @@ func TestMust_Err(t *testing.T) {
 }
 
 func TestMustValue_NoErr(t *testing.T) {
-	v := check.MustValue(f1NoErr())
+	v := must.Value(f1NoErr())
 	if v != "foo" {
 		t.Fatalf("expected foo, got: %v", v)
 	}
@@ -45,7 +44,7 @@ func TestMustValue_Err(t *testing.T) {
 		defer func() {
 			ret = recover()
 		}()
-		v := check.MustValue(f1Err())
+		v := must.Value(f1Err())
 		return v
 	}
 	v := wrapper()
@@ -59,7 +58,7 @@ func TestMustValue_Err(t *testing.T) {
 }
 
 func TestMustOK_True(t *testing.T) {
-	v := check.MustOK(fOKTrue())
+	v := must.OK(fOKTrue())
 	if v != "foo" {
 		t.Fatalf("expected foo, got: %v", v)
 	}
@@ -70,7 +69,7 @@ func TestMustOK_False(t *testing.T) {
 		defer func() {
 			ret = recover()
 		}()
-		v := check.MustOK(fOKFalse())
+		v := must.OK(fOKFalse())
 		return v
 	}
 	v := wrapper()

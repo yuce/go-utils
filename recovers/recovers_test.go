@@ -1,14 +1,13 @@
-package check_test
+package recovers_test
 
 import (
 	"fmt"
+	"github.com/yuce/go-utils/recovers"
 	"testing"
-
-	"github.com/yuce/go-check"
 )
 
 func TestRecover_NoErr(t *testing.T) {
-	err := check.Recover(func() {
+	err := recovers.Err(func() {
 		fmt.Println("OK")
 	})
 	if err != nil {
@@ -17,7 +16,7 @@ func TestRecover_NoErr(t *testing.T) {
 }
 
 func TestRecover_Err(t *testing.T) {
-	err := check.Recover(func() {
+	err := recovers.Err(func() {
 		panics()
 	})
 	if err == nil {
@@ -26,7 +25,7 @@ func TestRecover_Err(t *testing.T) {
 }
 
 func TestRecoverValue_NoErr(t *testing.T) {
-	v, err := check.RecoverValue(func() string {
+	v, err := recovers.Value(func() string {
 		return "OK"
 	})
 	if err != nil {
@@ -38,7 +37,7 @@ func TestRecoverValue_NoErr(t *testing.T) {
 }
 
 func TestRecoverValue_Err(t *testing.T) {
-	_, err := check.RecoverValue(func() string {
+	_, err := recovers.Value(func() string {
 		panics()
 		return "FAIL"
 	})
