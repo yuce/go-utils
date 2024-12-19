@@ -1,6 +1,8 @@
 package recovers
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // Err catches a panic and returns it as an error.
 func Err(f func()) (err error) {

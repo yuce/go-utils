@@ -11,7 +11,7 @@ var (
 )
 
 func TestMust_NoErr(t *testing.T) {
-	must.NoErr(f0NoErr())
+	must.NoError(f0NoErr())
 }
 
 func TestMust_Err(t *testing.T) {
@@ -19,7 +19,7 @@ func TestMust_Err(t *testing.T) {
 		defer func() {
 			ret = recover()
 		}()
-		must.NoErr(f0Err())
+		must.NoError(f0Err())
 		return nil
 	}
 	v := wrapper()
