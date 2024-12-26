@@ -39,6 +39,13 @@ func SliceEqual[T comparable](v1, v2 []T) {
 	}
 }
 
+func StringEqual[T ~string](v1, v2 T) {
+	if v1 != v2 {
+		loc := caller()
+		panic(fmt.Errorf("assert: string %s != %s (%s)", v1, v2, loc))
+	}
+}
+
 func caller() string {
 	_, fn, line, ok := runtime.Caller(2)
 	if ok {
