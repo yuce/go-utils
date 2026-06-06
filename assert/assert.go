@@ -46,6 +46,10 @@ func StringEqual[T ~string](v1, v2 T) {
 	}
 }
 
+func Panics(f func()) {
+
+}
+
 func caller() string {
 	_, fn, line, ok := runtime.Caller(2)
 	if ok {
