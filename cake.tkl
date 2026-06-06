@@ -1,0 +1,12 @@
+
+all.dep: [
+    | test
+]
+
+test.do: [
+    | go test ./as ./assert ./measuring ./must ./recovers ./types ./iters
+]
+
+benchmark.do: [
+    | go test -bench=. -benchmem ./as
+]
