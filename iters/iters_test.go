@@ -112,3 +112,16 @@ func TestIntRange_Panics(t *testing.T) {
 		})
 	}
 }
+
+func TestFromChan(t *testing.T) {
+	ch := make(chan int)
+	go func() {
+		for i := range 10 {
+			ch <- i
+		}
+		close(ch)
+	}()
+	nums := slices.Collect(iters.FromChan(ch))
+	target := slices.Collect(iters.IntRange(0, 10, 1))
+	assert.SliceEqual(target, nums)
+}

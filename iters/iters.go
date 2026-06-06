@@ -53,3 +53,13 @@ func IntRange[T ~int](start, stop, step T) iter.Seq[T] {
 		}
 	}
 }
+
+func FromChan[T any](ch <-chan T) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for item := range ch {
+			if !yield(item) {
+				return
+			}
+		}
+	}
+}
