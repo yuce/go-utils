@@ -1,6 +1,7 @@
 package recovers
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -9,15 +10,20 @@ func Err(f func()) (err error) {
 	defer func() {
 		v := recover()
 		if v != nil {
-			if e, ok := v.(error); ok {
-				err = fmt.Errorf("recover: %w", e)
-				return
+			switch vt := v.(type) {
+			case error:
+				err = vt
+			case string:
+				err = errors.New(vt)
+			case fmt.Stringer:
+				err = errors.New(vt.String())
+			default:
+				err = errors.New(fmt.Sprint(vt))
 			}
-			err = fmt.Errorf("recover: %s", v)
 		}
 	}()
 	f()
-	return err
+	return nil
 }
 
 // Value catches a panic and returns it as an error.
@@ -26,13 +32,18 @@ func Value[T any](f func() T) (ret T, err error) {
 	defer func() {
 		v := recover()
 		if v != nil {
-			if e, ok := v.(error); ok {
-				err = fmt.Errorf("recover: %w", e)
-				return
+			switch vt := v.(type) {
+			case error:
+				err = vt
+			case string:
+				err = errors.New(vt)
+			case fmt.Stringer:
+				err = errors.New(vt.String())
+			default:
+				err = errors.New(fmt.Sprint(vt))
 			}
-			err = fmt.Errorf("recover: %s", v)
 		}
 	}()
 	ret = f()
-	return ret, err
+	return ret, nil
 }
