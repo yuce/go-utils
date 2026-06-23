@@ -54,6 +54,7 @@ func IntRange[T ~int](start, stop, step T) iter.Seq[T] {
 	}
 }
 
+// FromCHan creates an iterator from a channel
 func FromChan[T any](ch <-chan T) iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for item := range ch {
@@ -62,4 +63,10 @@ func FromChan[T any](ch <-chan T) iter.Seq[T] {
 			}
 		}
 	}
+}
+
+// ErrItem contains a value or an error
+type ErrItem[T any] struct {
+	Item  T
+	Error error
 }
