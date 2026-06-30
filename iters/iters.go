@@ -54,7 +54,7 @@ func IntRange[T ~int](start, stop, step T) iter.Seq[T] {
 	}
 }
 
-// FromCHan creates an iterator from a channel
+// FromChan creates an iterator from a channel
 func FromChan[T any](ch <-chan T) iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for item := range ch {
@@ -63,6 +63,19 @@ func FromChan[T any](ch <-chan T) iter.Seq[T] {
 			}
 		}
 	}
+}
+
+// Collect collects the items in the given iterator.
+// It returns the partial list of items and the error if it encounters an error.
+func Collect[T any](it iter.Seq[ErrItem[T]]) ([]T, error) {
+	var r []T
+	for ei := range it {
+		if ei.Error != nil {
+			return nil, ei.Error
+		}
+		r = append(r, ei.Item)
+	}
+	return r, nil
 }
 
 // ErrItem contains a value or an error

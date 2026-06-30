@@ -1,6 +1,7 @@
 package iters_test
 
 import (
+	"errors"
 	"fmt"
 	"iter"
 	"slices"
@@ -124,4 +125,36 @@ func TestFromChan(t *testing.T) {
 	nums := slices.Collect(iters.FromChan(ch))
 	target := slices.Collect(iters.IntRange(0, 10, 1))
 	assert.SliceEqual(target, nums)
+}
+
+func TestCollect(t *testing.T) {
+	items, err := iters.Collect(errSequence(10))
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected := []int{0, 1, 2, 3, 4}
+	assert.SliceEqual(expected, items)
+}
+
+func TestCollect_Error(t *testing.T) {
+	_, err := iters.Collect(errSequence(2))
+	if err != ErrInvalidNumber {
+		t.Fatalf("expected error %v, got %v", ErrInvalidNumber, err)
+	}
+}
+
+var ErrInvalidNumber = errors.New("invalid number")
+
+func errSequence(errAt int) iter.Seq[iters.ErrItem[int]] {
+	return func(yield func(iters.ErrItem[int]) bool) {
+		for i := range 5 {
+			if i == errAt {
+				yield(iters.ErrItem[int]{Error: ErrInvalidNumber})
+				return
+			}
+			if !yield(iters.ErrItem[int]{Item: i}) {
+				break
+			}
+		}
+	}
 }
